@@ -132,6 +132,7 @@ extension DrawingViewController {
         
         viewModel.touchesMoved(currentPoint: touch.location(in: view))
         drawLine(from: viewModel.lastPoint, to: viewModel.currentPoint)
+        self.view.setNeedsDisplay()
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
