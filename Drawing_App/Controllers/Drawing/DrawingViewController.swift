@@ -145,10 +145,10 @@ extension DrawingViewController {
         UIGraphicsBeginImageContext(self.mainImageView.frame.size)
         mainImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: 1.0)
         tempImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: viewModel.opacity)
-        mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-        UIGraphicsEndImageContext()
-        
-        tempImageView.image = nil
+//        mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+//        UIGraphicsEndImageContext()
+        tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+//        tempImageView.image = nil
     }
     
     func drawLine(from fromPoint: CGPoint,
@@ -166,6 +166,7 @@ extension DrawingViewController {
         
         if viewModel.ereaser {
             context.setBlendMode(.clear)
+            
             context.setLineWidth(viewModel.brushWidth)
         } else {
             context.setBlendMode(.normal)
