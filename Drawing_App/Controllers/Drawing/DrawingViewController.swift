@@ -21,7 +21,7 @@ class DrawingViewController: UIViewController {
     // MARK: - UI Object
     private let mainImageView = UIImageView().then {
         $0.backgroundColor = .white
-        $0.image = UIImage(named: "Juice")
+//        $0.image = UIImage(named: "Juice")
     }
     
     private let tempImageView = UIImageView().then {
@@ -164,8 +164,10 @@ extension DrawingViewController {
         context.setLineCap(.round)
         
         if viewModel.ereaser {
-            context.setBlendMode(.clear)
+            context.setBlendMode(.normal)
             context.setLineWidth(viewModel.brushWidth)
+            context.setStrokeColor(viewModel.color.cgColor)
+
         } else {
             context.setBlendMode(.normal)
             context.setLineWidth(viewModel.brushWidth)
