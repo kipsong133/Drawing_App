@@ -16,6 +16,8 @@
 		25313C9B26E47BFC00271487 /* DrawingViewControllerCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25313C9A26E47BFC00271487 /* DrawingViewControllerCoordinator.swift */; };
 		25313C9D26E483EC00271487 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25313C9C26E483EC00271487 /* Extensions.swift */; };
 		25313C9F26E485CB00271487 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25313C9E26E485CB00271487 /* SettingsViewController.swift */; };
+		25313CA326E49CAA00271487 /* Pencil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25313CA226E49CAA00271487 /* Pencil.swift */; };
+		25313CA526E49D8400271487 /* DrawingViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25313CA426E49D8400271487 /* DrawingViewControllerViewModel.swift */; };
 		2D1521E7E5D40527797430D2 /* Pods_Drawing_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A467DA3FBEE2F3174E0EFD /* Pods_Drawing_App.framework */; };
 /* End PBXBuildFile section */
 
@@ -31,6 +33,8 @@
 		25313C9A26E47BFC00271487 /* DrawingViewControllerCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewControllerCoordinator.swift; sourceTree = "<group>"; };
 		25313C9C26E483EC00271487 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		25313C9E26E485CB00271487 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		25313CA226E49CAA00271487 /* Pencil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pencil.swift; sourceTree = "<group>"; };
+		25313CA426E49D8400271487 /* DrawingViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewControllerViewModel.swift; sourceTree = "<group>"; };
 		3C660C6D96FD02897F0D45FA /* Pods-Drawing_App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Drawing_App.debug.xcconfig"; path = "Target Support Files/Pods-Drawing_App/Pods-Drawing_App.debug.xcconfig"; sourceTree = "<group>"; };
 		643B042F26B9184095B6DDAE /* Pods-Drawing_App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Drawing_App.release.xcconfig"; path = "Target Support Files/Pods-Drawing_App/Pods-Drawing_App.release.xcconfig"; sourceTree = "<group>"; };
 		D4A467DA3FBEE2F3174E0EFD /* Pods_Drawing_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Drawing_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,6 +82,7 @@
 		25313C7A26E478CE00271487 /* Drawing_App */ = {
 			isa = PBXGroup;
 			children = (
+				25313CA126E49CA100271487 /* Models */,
 				25313C8F26E478E000271487 /* App */,
 				25313C9026E478E700271487 /* Asset */,
 				25313C9526E4795B00271487 /* Coordinator */,
@@ -119,6 +124,7 @@
 		25313C9226E4794500271487 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				25313CA426E49D8400271487 /* DrawingViewControllerViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -146,6 +152,14 @@
 				25313C9E26E485CB00271487 /* SettingsViewController.swift */,
 			);
 			path = Drawing;
+			sourceTree = "<group>";
+		};
+		25313CA126E49CA100271487 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				25313CA226E49CAA00271487 /* Pencil.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		E0520707EC2C73F04AC97748 /* Frameworks */ = {
@@ -271,10 +285,12 @@
 			files = (
 				25313C9B26E47BFC00271487 /* DrawingViewControllerCoordinator.swift in Sources */,
 				25313C9D26E483EC00271487 /* Extensions.swift in Sources */,
+				25313CA326E49CAA00271487 /* Pencil.swift in Sources */,
 				25313C9F26E485CB00271487 /* SettingsViewController.swift in Sources */,
 				25313C9726E479E100271487 /* AppCoordinator.swift in Sources */,
 				25313C9926E47A9600271487 /* DrawingViewController.swift in Sources */,
 				25313C7C26E478CE00271487 /* AppDelegate.swift in Sources */,
+				25313CA526E49D8400271487 /* DrawingViewControllerViewModel.swift in Sources */,
 				25313C7E26E478CE00271487 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

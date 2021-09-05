@@ -19,7 +19,13 @@ class DrawingViewControllerCoordinator: Coordinator {
     
     func start() {
         // present VC
-        let vc = DrawingViewController()
+        let viewModel
+            = DrawingViewControllerViewModel(lastPoint: .zero,
+                                             color: .black,
+                                             brushWidth: 10.0,
+                                             opacity: 1.0,
+                                             swiped: false)
+        let vc = DrawingViewController(viewModel: viewModel)
         vc.delegate = self
         vc.view.backgroundColor = .white
         self.nav.navigationBar.isHidden = false

@@ -15,15 +15,16 @@ protocol DrawingViewControllerDelegate {
 
 class DrawingViewController: UIViewController {
     
+    var viewModel: DrawingViewControllerViewModel!
     var delegate: DrawingViewControllerDelegate?
     
     // MARK: - UI Object
     private let mainImageView = UIImageView().then {
-        $0.backgroundColor = .white
+        $0.backgroundColor = .clear
     }
     
     private let tempImageView = UIImageView().then {
-        $0.backgroundColor = .white
+        $0.backgroundColor = .clear
     }
     
     private let resetButton = UIButton().then {
@@ -52,42 +53,62 @@ class DrawingViewController: UIViewController {
     
     private let blackPencil = UIButton().then {
         $0.backgroundColor = .black
+        $0.tag = 1
     }
     private let grayPencil = UIButton().then {
         $0.backgroundColor = .gray
+        $0.tag = 2
     }
     private let redPencil = UIButton().then {
         $0.backgroundColor = .red
+        $0.tag = 3
     }
     private let bluePencil = UIButton().then {
         $0.backgroundColor = .blue
+        $0.tag = 4
     }
     private let skyBluePencil = UIButton().then {
         $0.backgroundColor = .systemBlue
+        $0.tag = 5
     }
     private let greenPencil = UIButton().then {
         $0.backgroundColor = .green
+        $0.tag = 6
     }
     private let lightGreenPencil = UIButton().then {
         $0.backgroundColor = .systemGreen
+        $0.tag = 7
     }
     private let brownPencil = UIButton().then {
         $0.backgroundColor = .brown
+        $0.tag = 8
     }
     private let orangePencil = UIButton().then {
         $0.backgroundColor = .orange
+        $0.tag = 9
     }
     private let yellowPencil = UIButton().then {
         $0.backgroundColor = .yellow
+        $0.tag = 10
     }
     private let ereaser = UIButton().then {
         $0.backgroundColor = .purple
+        $0.tag = 11
+    }
+    
+    init(viewModel: DrawingViewControllerViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
 
 // MARK: - View Lifecycle
 extension DrawingViewController {
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
@@ -96,6 +117,61 @@ extension DrawingViewController {
 
 // MARK: - Actions
 extension DrawingViewController {
+    
+    override func touchesBegan(_ touches: Set<UITouch>,
+                               with event: UIEvent?) {
+        
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: view)
+        viewModel.touchBegan(location: location)
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        
+        viewModel.touchesMoved(currentPoint: touch.location(in: view))
+        drawLine(from: viewModel.lastPoint, to: viewModel.currentPoint)
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        if !(viewModel.swiped) {
+            drawLine(from: viewModel.lastPoint,
+                     to: viewModel.lastPoint)
+        }
+        
+        UIGraphicsBeginImageContext(self.mainImageView.frame.size)
+        mainImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: 1.0)
+        tempImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: viewModel.opacity)
+        mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        tempImageView.image = nil
+    }
+    
+    func drawLine(from fromPoint: CGPoint,
+                  to toPoint: CGPoint) {
+        
+        UIGraphicsBeginImageContext(view.frame.size)
+        guard let context = UIGraphicsGetCurrentContext() else { return }
+        
+        tempImageView.image?.draw(in: view.bounds)
+        
+        context.move(to: fromPoint)
+        context.addLine(to: toPoint)
+        
+        context.setLineCap(.round)
+        context.setBlendMode(.normal)
+        context.setLineWidth(viewModel.brushWidth)
+        context.setStrokeColor(viewModel.color.cgColor)
+        
+        context.strokePath()
+        
+        tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        tempImageView.alpha = viewModel.opacity
+        UIGraphicsEndImageContext()
+        viewModel.changePoint()
+    }
     
     @objc
     func resetButtonDidTap(_ sender: UIButton) {
@@ -117,6 +193,8 @@ extension DrawingViewController {
     func pencilButtonDidTap(_ sender: UIButton) {
         logMessage("연필버튼")
     }
+    
+    
 }
 
 // MARK: - Helpers
