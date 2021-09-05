@@ -9,7 +9,13 @@ import UIKit
 import SnapKit
 import Then
 
+protocol DrawingViewControllerDelegate {
+    func showSettingVC()
+}
+
 class DrawingViewController: UIViewController {
+    
+    var delegate: DrawingViewControllerDelegate?
     
     // MARK: - UI Object
     private let mainImageView = UIImageView().then {
@@ -104,6 +110,7 @@ extension DrawingViewController {
     @objc
     func settingButtonDidTap(_ sender: UIButton) {
         logMessage("설정버튼")
+        delegate?.showSettingVC()
     }
     
     @objc
@@ -135,12 +142,13 @@ extension DrawingViewController {
             functionBtnArr.forEach { functionBtn in
                 make.addArrangedSubview(functionBtn)
             }
+            make.backgroundColor = .lightGray
             make.distribution = .fillEqually
             make.axis = .horizontal
         }
         view.addSubview(functionStack)
         functionStack.snp.makeConstraints {
-            $0.top.equalTo(view.snp.top)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.centerX.equalTo(view.snp.centerX)
             $0.height.equalTo(view.snp.height).multipliedBy(0.1)
             $0.left.equalTo(view.snp.left)

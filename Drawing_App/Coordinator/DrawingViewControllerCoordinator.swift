@@ -20,8 +20,22 @@ class DrawingViewControllerCoordinator: Coordinator {
     func start() {
         // present VC
         let vc = DrawingViewController()
+        vc.delegate = self
         vc.view.backgroundColor = .white
-        self.nav.navigationBar.isHidden = true
+        self.nav.navigationBar.isHidden = false
         self.nav.viewControllers = [vc]
+    }
+    
+    func settingButtonDidTap() {
+        let settingVC = SettingsViewController()
+        settingVC.view.backgroundColor = .white
+        self.nav.navigationBar.isHidden = false
+        self.nav.pushViewController(settingVC, animated: true)
+    }
+}
+
+extension DrawingViewControllerCoordinator: DrawingViewControllerDelegate {
+    func showSettingVC() {
+        self.settingButtonDidTap()
     }
 }
