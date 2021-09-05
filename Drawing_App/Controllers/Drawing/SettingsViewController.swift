@@ -16,26 +16,41 @@ class SettingsViewController: UIViewController {
         $0.value = 10
         $0.minimumValue = 1
         $0.maximumValue = 80
+        $0.addTarget(self,
+                     action: #selector(brushDidChanged),
+                     for: .valueChanged)
     }
     private let opacitySlider = UISlider().then {
         $0.value = 1
         $0.minimumValue = 0
         $0.maximumValue = 1
+        $0.addTarget(self,
+                     action: #selector(opacityDidChanged),
+                     for: .valueChanged)
     }
     private let redSlider = UISlider().then {
         $0.value = 0
         $0.minimumValue = 0
         $0.maximumValue = 255
+        $0.addTarget(self,
+                     action: #selector(redDidChanged),
+                     for: .valueChanged)
     }
     private let greenSlider = UISlider().then {
         $0.value = 0
         $0.minimumValue = 0
         $0.maximumValue = 255
+        $0.addTarget(self,
+                     action: #selector(greenDidChanged),
+                     for: .valueChanged)
     }
     private let blueSlider = UISlider().then {
         $0.value = 0
         $0.minimumValue = 0
         $0.maximumValue = 255
+        $0.addTarget(self,
+                     action: #selector(blueDidChanged),
+                     for: .valueChanged)
     }
     
     private let brushTitleLabel = UILabel().then {
@@ -97,6 +112,31 @@ extension SettingsViewController {
 // MARK: - Actions
 extension SettingsViewController {
     
+    @objc
+    func brushDidChanged(_ sender: UISlider) {
+        logMessage("브러쉬: \(sender.value)")
+    }
+    
+    @objc
+    func opacityDidChanged(_ sender: UISlider) {
+        logMessage("투명도: \(sender.value)")
+    }
+    
+    @objc
+    func redDidChanged(_ sender: UISlider) {
+        logMessage("빨강: \(sender.value)")
+    }
+    
+    @objc
+    func greenDidChanged(_ sender: UISlider) {
+        logMessage("초록: \(sender.value)")
+    }
+    
+    @objc
+    func blueDidChanged(_ sender: UISlider) {
+        logMessage("파랑: \(sender.value)")
+    }
+
 }
 
 // MARK: - Helpers
@@ -205,6 +245,7 @@ extension SettingsViewController {
             $0.centerY.equalTo(blueSlider.snp.centerY)
             $0.left.equalTo(blueSlider.snp.right).offset(20)
         }
+        
         
     }
 }
