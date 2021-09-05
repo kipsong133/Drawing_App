@@ -20,19 +20,28 @@ class DrawingViewController: UIViewController {
         $0.backgroundColor = .white
     }
     
-    private let ressetButton = UIButton().then {
+    private let resetButton = UIButton().then {
         $0.setTitle("초기화", for: .normal)
         $0.setTitleColor(.black, for: .normal)
+        $0.addTarget(self,
+                     action: #selector(resetButtonDidTap),
+                     for: .touchUpInside)
     }
     
     private let settingButton = UIButton().then {
         $0.setTitle("설정", for: .normal)
         $0.setTitleColor(.black, for: .normal)
+        $0.addTarget(self,
+                     action: #selector(settingButtonDidTap),
+                     for: .touchUpInside)
     }
     
     private let shareButton = UIButton().then {
         $0.setTitle("공유", for: .normal)
         $0.setTitleColor(.black, for: .normal)
+        $0.addTarget(self,
+                     action: #selector(shareButtonDidTap),
+                     for: .touchUpInside)
     }
     
     private let blackPencil = UIButton().then {
@@ -82,6 +91,25 @@ extension DrawingViewController {
 // MARK: - Actions
 extension DrawingViewController {
     
+    @objc
+    func resetButtonDidTap(_ sender: UIButton) {
+        logMessage("리셋버튼")
+    }
+    
+    @objc
+    func shareButtonDidTap(_ sender: UIButton) {
+        logMessage("공유버튼")
+    }
+    
+    @objc
+    func settingButtonDidTap(_ sender: UIButton) {
+        logMessage("설정버튼")
+    }
+    
+    @objc
+    func pencilButtonDidTap(_ sender: UIButton) {
+        logMessage("연필버튼")
+    }
 }
 
 // MARK: - Helpers
@@ -100,8 +128,32 @@ extension DrawingViewController {
             $0.width.equalTo(view.snp.width)
             $0.height.equalTo(view.snp.height)
         }
+        
+        let functionBtnArr = [resetButton, settingButton, shareButton]
+        let functionStack = UIStackView().then { (make) in
+            make.alignment = .fill
+            functionBtnArr.forEach { functionBtn in
+                make.addArrangedSubview(functionBtn)
+            }
+            make.distribution = .fillEqually
+            make.axis = .horizontal
+        }
+        view.addSubview(functionStack)
+        functionStack.snp.makeConstraints {
+            $0.top.equalTo(view.snp.top)
+            $0.centerX.equalTo(view.snp.centerX)
+            $0.height.equalTo(view.snp.height).multipliedBy(0.1)
+            $0.left.equalTo(view.snp.left)
+            $0.right.equalTo(view.snp.right)
+        }
+
         let pencilBtnArr = [blackPencil, grayPencil, redPencil,
         bluePencil, skyBluePencil, greenPencil, lightGreenPencil, brownPencil, orangePencil, yellowPencil, ereaser]
+        
+        pencilBtnArr
+            .forEach { $0.addTarget(self,
+                       action: #selector(pencilButtonDidTap),
+                       for: .touchUpInside) }
         
         let pencilStack = UIStackView().then { (make) in
             make.alignment = .fill
