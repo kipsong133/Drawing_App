@@ -21,6 +21,7 @@ class DrawingViewControllerCoordinator: Coordinator {
         // present VC
         let vc = DrawingViewController()
         vc.view.backgroundColor = .white
+        self.nav.navigationBar.isHidden = true
         self.nav.viewControllers = [vc]
     }
 }
