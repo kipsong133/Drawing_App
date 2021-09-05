@@ -16,6 +16,7 @@ class DrawingViewControllerViewModel {
     var brushWidth: CGFloat
     var opacity: CGFloat
     var swiped: Bool
+    var ereaser: Bool = false
     
     init(lastPoint: CGPoint,
          color: UIColor,
@@ -43,5 +44,17 @@ class DrawingViewControllerViewModel {
     
     func changePoint() {
         self.lastPoint = self.currentPoint
+    }
+    
+    func setColor(_ colorButtonTagValue: Int) {
+        
+        guard let pencil = Pencil(tag: colorButtonTagValue) else { return }
+        color = pencil.color
+        
+        if pencil == .eraser {
+            self.ereaser = true
+        } else {
+            self.ereaser = false
+        }
     }
 }

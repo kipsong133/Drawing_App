@@ -20,7 +20,8 @@ class DrawingViewController: UIViewController {
     
     // MARK: - UI Object
     private let mainImageView = UIImageView().then {
-        $0.backgroundColor = .clear
+        $0.backgroundColor = .white
+        $0.image = UIImage(named: "Juice")
     }
     
     private let tempImageView = UIImageView().then {
@@ -161,9 +162,15 @@ extension DrawingViewController {
         context.addLine(to: toPoint)
         
         context.setLineCap(.round)
-        context.setBlendMode(.normal)
-        context.setLineWidth(viewModel.brushWidth)
-        context.setStrokeColor(viewModel.color.cgColor)
+        
+        if viewModel.ereaser {
+            context.setBlendMode(.clear)
+            context.setLineWidth(viewModel.brushWidth)
+        } else {
+            context.setBlendMode(.normal)
+            context.setLineWidth(viewModel.brushWidth)
+            context.setStrokeColor(viewModel.color.cgColor)
+        }
         
         context.strokePath()
         
@@ -192,6 +199,7 @@ extension DrawingViewController {
     @objc
     func pencilButtonDidTap(_ sender: UIButton) {
         logMessage("연필버튼")
+        viewModel.setColor(sender.tag)
     }
     
     
