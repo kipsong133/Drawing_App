@@ -18,13 +18,15 @@ class DrawingViewController: UIViewController {
     var viewModel: DrawingViewControllerViewModel!
     var delegate: DrawingViewControllerDelegate?
     
+    
+    
     // MARK: - UI Object
-    private let mainImageView = UIImageView().then {
+    private var mainImageView = UIImageView().then {
         $0.backgroundColor = .white
         $0.image = UIImage(named: "Juice")
     }
     
-    private let tempImageView = UIImageView().then {
+    private var tempImageView = UIImageView().then {
         $0.backgroundColor = .clear
     }
     
@@ -93,10 +95,23 @@ class DrawingViewController: UIViewController {
         $0.tag = 10
     }
     private let ereaser = UIButton().then {
-        $0.backgroundColor = .purple
+        $0.backgroundColor = .white
+        $0.layer.cornerRadius = 4
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.black.cgColor
         $0.tag = 11
     }
     
+    private let reDoButton = UIButton().then {
+        $0.setTitle("REDO", for: .normal)
+        $0.addTarget(self, action: #selector(redoDidTap), for: .touchUpInside)
+    }
+    private let unDoButton = UIButton().then {
+        $0.setTitle("UNDO", for: .normal)
+        $0.addTarget(self, action: #selector(undoDidTap), for: .touchUpInside)
+    }
+    
+    // MARK: - Lifecycle
     init(viewModel: DrawingViewControllerViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -141,13 +156,18 @@ extension DrawingViewController {
             drawLine(from: viewModel.lastPoint,
                      to: viewModel.lastPoint)
         }
-        
+
         UIGraphicsBeginImageContext(self.mainImageView.frame.size)
         mainImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: 1.0)
-        tempImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: viewModel.opacity)
+        tempImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: viewModel.opacity) // 그리는 시점
 //        mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
 //        UIGraphicsEndImageContext()
+        
         tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        
+        if let strokesImage = UIGraphicsGetImageFromCurrentImageContext() {
+            viewModel.addStrokesImage(strokesImage)
+        }
 //        tempImageView.image = nil
     }
     
@@ -157,13 +177,18 @@ extension DrawingViewController {
         UIGraphicsBeginImageContext(view.frame.size)
         guard let context = UIGraphicsGetCurrentContext() else { return }
         
+        func connectingPoint(from: CGPoint, to: CGPoint) {
+            context.move(to: from)
+            context.addLine(to: to)
+            context.setLineCap(.round)
+        }
+        
         tempImageView.image?.draw(in: view.bounds)
         
         context.move(to: fromPoint)
         context.addLine(to: toPoint)
-        
         context.setLineCap(.round)
-        
+
         if viewModel.ereaser {
             context.setBlendMode(.clear)
             
@@ -178,13 +203,13 @@ extension DrawingViewController {
         
         tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         tempImageView.alpha = viewModel.opacity
-        UIGraphicsEndImageContext()
+//        UIGraphicsEndImageContext()
         viewModel.changePoint()
     }
     
     @objc
     func resetButtonDidTap(_ sender: UIButton) {
-        logMessage("리셋버튼")
+        
     }
     
     @objc
@@ -204,7 +229,15 @@ extension DrawingViewController {
         viewModel.setColor(sender.tag)
     }
     
+    @objc
+    func redoDidTap() {
+        tempImageView.image = viewModel.redoDrawing()
+    }
     
+    @objc
+    func undoDidTap() {
+        tempImageView.image = viewModel.undoDrawing()
+    }
 }
 
 // MARK: - Helpers
@@ -266,6 +299,22 @@ extension DrawingViewController {
             $0.height.equalTo(view.snp.height).multipliedBy(0.15)
             $0.bottom.equalTo(view.snp.bottom)
             $0.left.equalTo(view.snp.left)
+        }
+        
+        view.addSubview(reDoButton)
+        reDoButton.snp.makeConstraints {
+            $0.width.equalTo(100)
+            $0.height.equalTo(30)
+            $0.left.equalTo(view.snp.left)
+            $0.bottom.equalTo(pencilStack.snp.top)
+        }
+        
+        view.addSubview(unDoButton)
+        unDoButton.snp.makeConstraints {
+            $0.width.equalTo(100)
+            $0.height.equalTo(30)
+            $0.right.equalTo(view.snp.right)
+            $0.bottom.equalTo(pencilStack.snp.top)
         }
     }
 }
