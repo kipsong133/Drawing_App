@@ -19,6 +19,7 @@
 		25313C9F26E485CB00271487 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25313C9E26E485CB00271487 /* SettingsViewController.swift */; };
 		25313CA326E49CAA00271487 /* Pencil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25313CA226E49CAA00271487 /* Pencil.swift */; };
 		25313CA526E49D8400271487 /* DrawingViewControllerViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25313CA426E49D8400271487 /* DrawingViewControllerViewModel.swift */; };
+		2562360526FAF18100BADEC0 /* RingBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2562360426FAF18100BADEC0 /* RingBuffer.swift */; };
 		2D1521E7E5D40527797430D2 /* Pods_Drawing_App.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D4A467DA3FBEE2F3174E0EFD /* Pods_Drawing_App.framework */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		25313C9E26E485CB00271487 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		25313CA226E49CAA00271487 /* Pencil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pencil.swift; sourceTree = "<group>"; };
 		25313CA426E49D8400271487 /* DrawingViewControllerViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrawingViewControllerViewModel.swift; sourceTree = "<group>"; };
+		2562360426FAF18100BADEC0 /* RingBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RingBuffer.swift; sourceTree = "<group>"; };
 		3C660C6D96FD02897F0D45FA /* Pods-Drawing_App.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Drawing_App.debug.xcconfig"; path = "Target Support Files/Pods-Drawing_App/Pods-Drawing_App.debug.xcconfig"; sourceTree = "<group>"; };
 		643B042F26B9184095B6DDAE /* Pods-Drawing_App.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Drawing_App.release.xcconfig"; path = "Target Support Files/Pods-Drawing_App/Pods-Drawing_App.release.xcconfig"; sourceTree = "<group>"; };
 		D4A467DA3FBEE2F3174E0EFD /* Pods_Drawing_App.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Drawing_App.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -161,6 +163,7 @@
 			children = (
 				25313CA226E49CAA00271487 /* Pencil.swift */,
 				250F41AE26F9774F009F322F /* Line.swift */,
+				2562360426FAF18100BADEC0 /* RingBuffer.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 				25313C9D26E483EC00271487 /* Extensions.swift in Sources */,
 				25313CA326E49CAA00271487 /* Pencil.swift in Sources */,
 				25313C9F26E485CB00271487 /* SettingsViewController.swift in Sources */,
+				2562360526FAF18100BADEC0 /* RingBuffer.swift in Sources */,
 				25313C9726E479E100271487 /* AppCoordinator.swift in Sources */,
 				25313C9926E47A9600271487 /* DrawingViewController.swift in Sources */,
 				25313C7C26E478CE00271487 /* AppDelegate.swift in Sources */,

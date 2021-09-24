@@ -18,6 +18,7 @@ class DrawingViewControllerViewModel {
     var swiped: Bool
     var ereaser: Bool = false
 
+    var buffer = RingBuffer<UIImage>(count: 4)
     var strokes: [UIImage] = []
     var currentIndex: Int = 0
     
@@ -42,7 +43,6 @@ class DrawingViewControllerViewModel {
     func touchesMoved(currentPoint: CGPoint) {
         swiped = true
         self.currentPoint = currentPoint
-        
     }
     
     func changePoint() {
@@ -113,6 +113,18 @@ class DrawingViewControllerViewModel {
 //        }
 //    }
 }
+
+extension DrawingViewControllerViewModel {
+    
+    func addBuffer(_ image: UIImage) {
+        _ = buffer.write(image)
+    }
+    
+    func deqeueBuffer() -> UIImage? {
+        buffer.read()
+    }
+}
+
 
 enum DrawingOperatorType {
     case redo

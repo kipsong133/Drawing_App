@@ -17,7 +17,7 @@ class DrawingViewController: UIViewController {
     
     var viewModel: DrawingViewControllerViewModel!
     var delegate: DrawingViewControllerDelegate?
-    
+    var undoMng = UndoManager()
     
     
     // MARK: - UI Object
@@ -39,19 +39,22 @@ class DrawingViewController: UIViewController {
     }
     
     private let settingButton = UIButton().then {
-        $0.setTitle("설정", for: .normal)
+        $0.setTitle("ReDo", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.addTarget(self,
-                     action: #selector(settingButtonDidTap),
-                     for: .touchUpInside)
+        $0.addTarget(self, action: #selector(redoDidTap), for: .touchUpInside)
+        //        $0.addTarget(self,
+        //                     action: #selector(settingButtonDidTap),
+        //                     for: .touchUpInside)
     }
     
     private let shareButton = UIButton().then {
         $0.setTitle("공유", for: .normal)
         $0.setTitleColor(.black, for: .normal)
-        $0.addTarget(self,
-                     action: #selector(shareButtonDidTap),
-                     for: .touchUpInside)
+        $0.addTarget(self, action: #selector(undoDidTap), for: .touchUpInside)
+        
+        //        $0.addTarget(self,
+        //                     action: #selector(shareButtonDidTap),
+        //                     for: .touchUpInside)
     }
     
     private let blackPencil = UIButton().then {
@@ -104,11 +107,13 @@ class DrawingViewController: UIViewController {
     
     private let reDoButton = UIButton().then {
         $0.setTitle("REDO", for: .normal)
-        $0.addTarget(self, action: #selector(redoDidTap), for: .touchUpInside)
+        //        $0.addTarget(self, action: #selector(redoDidTap), for: .touchUpInside)
+        $0.backgroundColor = .black
     }
     private let unDoButton = UIButton().then {
         $0.setTitle("UNDO", for: .normal)
-        $0.addTarget(self, action: #selector(undoDidTap), for: .touchUpInside)
+        //        $0.addTarget(self, action: #selector(undoDidTap), for: .touchUpInside)
+        $0.backgroundColor = .black
     }
     
     // MARK: - Lifecycle
@@ -124,7 +129,7 @@ class DrawingViewController: UIViewController {
 
 // MARK: - View Lifecycle
 extension DrawingViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupLayout()
@@ -145,6 +150,7 @@ extension DrawingViewController {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         
+        
         viewModel.touchesMoved(currentPoint: touch.location(in: view))
         drawLine(from: viewModel.lastPoint, to: viewModel.currentPoint)
         self.view.setNeedsDisplay()
@@ -152,23 +158,26 @@ extension DrawingViewController {
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
+        
         if !(viewModel.swiped) {
             drawLine(from: viewModel.lastPoint,
                      to: viewModel.lastPoint)
         }
-
+        
         UIGraphicsBeginImageContext(self.mainImageView.frame.size)
         mainImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: 1.0)
         tempImageView.image?.draw(in: view.bounds, blendMode: .normal, alpha: viewModel.opacity) // 그리는 시점
-//        mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-//        UIGraphicsEndImageContext()
+        //        mainImageView.image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
         
         tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
-        
+        registerStroke(UIGraphicsGetImageFromCurrentImageContext() ?? UIImage())
+
         if let strokesImage = UIGraphicsGetImageFromCurrentImageContext() {
-            viewModel.addStrokesImage(strokesImage)
+            //            viewModel.addStrokesImage(strokesImage)
+            viewModel.addBuffer(strokesImage)
         }
-//        tempImageView.image = nil
+        //        tempImageView.image = nil
     }
     
     func drawLine(from fromPoint: CGPoint,
@@ -188,7 +197,7 @@ extension DrawingViewController {
         context.move(to: fromPoint)
         context.addLine(to: toPoint)
         context.setLineCap(.round)
-
+        
         if viewModel.ereaser {
             context.setBlendMode(.clear)
             
@@ -200,10 +209,9 @@ extension DrawingViewController {
         }
         
         context.strokePath()
-        
         tempImageView.image = UIGraphicsGetImageFromCurrentImageContext()
         tempImageView.alpha = viewModel.opacity
-//        UIGraphicsEndImageContext()
+        //        UIGraphicsEndImageContext()
         viewModel.changePoint()
     }
     
@@ -231,12 +239,19 @@ extension DrawingViewController {
     
     @objc
     func redoDidTap() {
-        tempImageView.image = viewModel.redoDrawing()
+        //        tempImageView.image = viewModel.redoDrawing()
+        //        tempImageView.image = viewModel.deqeueBuffer()
+        
+        self.undoMng.redo()
+        
     }
     
     @objc
     func undoDidTap() {
-        tempImageView.image = viewModel.undoDrawing()
+        //        tempImageView.image = viewModel.undoDrawing()
+        //        tempImageView.image = viewModel.deqeueBuffer()
+        self.undoMng.undo()
+        
     }
 }
 
@@ -275,14 +290,14 @@ extension DrawingViewController {
             $0.left.equalTo(view.snp.left)
             $0.right.equalTo(view.snp.right)
         }
-
+        
         let pencilBtnArr = [blackPencil, grayPencil, redPencil,
-        bluePencil, skyBluePencil, greenPencil, lightGreenPencil, brownPencil, orangePencil, yellowPencil, ereaser]
+                            bluePencil, skyBluePencil, greenPencil, lightGreenPencil, brownPencil, orangePencil, yellowPencil, ereaser]
         
         pencilBtnArr
             .forEach { $0.addTarget(self,
-                       action: #selector(pencilButtonDidTap),
-                       for: .touchUpInside) }
+                                    action: #selector(pencilButtonDidTap),
+                                    for: .touchUpInside) }
         
         let pencilStack = UIStackView().then { (make) in
             make.alignment = .fill
@@ -316,6 +331,20 @@ extension DrawingViewController {
             $0.right.equalTo(view.snp.right)
             $0.bottom.equalTo(pencilStack.snp.top)
         }
+        
+        unDoButton.isEnabled = self.undoMng.canUndo
+        reDoButton.isEnabled = self.undoMng.canRedo
+    }
+    
+    func registerStroke(_ image: UIImage) {
+        
+        let old = self.tempImageView.image ?? UIImage()
+        
+        undoMng.registerUndo(withTarget: self, handler: { target in
+            target.registerStroke(old)
+        })
+        
+        tempImageView.image = image
     }
 }
 
